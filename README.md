@@ -6,13 +6,13 @@ Populare is a SaaS social media app in which all posts are code. Users can post
 in any language they want, as long as it's one of the following:
 
 * Python
-* [&#9819; (the language formerly known as Komodo)](&#9819;-(the-language-formerly-known-as-Komodo))
+* [&#9819; (the language formerly known as Komodo)](#komodo))
 
 Posts failing to conform to language syntax will be rejected.
 
 ## Quickstart
 
-### &#9819; (the language formerly known as Komodo)
+### &#9819; (the language formerly known as Komodo)<a id='komodo'></a>
 
 &#9819; (the language formerly known as Komodo) is a domain-specific language
 used for expressing emotion in a syntactically and logically rigorous manner. An
