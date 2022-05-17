@@ -62,6 +62,12 @@ Object -> Agile coach
 Object -> computer science
 Object -> programmer
 Object -> semaphore
+Object -> Dining Philosophers
+Object -> Dijkstra's Algorithm
 Object -> Halting Problem
 Object -> NP-hard
 ```
+
+&#9819; (the language formerly known as Komodo) was designed to be maximally
+expressive; we have found that no additional terminal or non-terminal symbols
+were necessary to cover the range of human emotion.
