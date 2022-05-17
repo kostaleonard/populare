@@ -6,7 +6,7 @@ Populare is a SaaS social media app in which all posts are code. Users can post
 in any language they want, as long as it's one of the following:
 
 * Python
-* [&#9819; (the language formerly known as Komodo)](#komodo))
+* [&#9819; (the language formerly known as Komodo)](#komodo)
 
 Posts failing to conform to language syntax will be rejected.
 
