@@ -1,7 +1,7 @@
-//Tests populare_app.dart.
+//Tests main.dart.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:populare/populare_app.dart';
+import 'package:populare/main.dart';
 
 void main() {
   testWidgets('App has a title', (WidgetTester tester) async {
