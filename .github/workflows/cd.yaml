@@ -1,7 +1,7 @@
 name: Deploy to GitHub Pages
-on: push
-#  release:
-#    types: [published]
+on:
+  release:
+    types: [published]
 jobs:
   deploy:
     runs-on: ubuntu-latest

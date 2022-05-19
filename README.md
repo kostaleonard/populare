@@ -1,5 +1,7 @@
 # Populare
 
+Available [on GitHub Pages](https://kostaleonard.github.io/populare/).
+
 *Code as social media.*
 
 Populare is a SaaS social media app in which all posts are code. Users can post
