@@ -14,7 +14,7 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
       - name: Build app
-        run: flutter build web
+        run: flutter build web --base-href /populare/
       - name: Upload build artifact
         uses: actions/upload-artifact@v2
         with:
