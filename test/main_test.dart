@@ -7,6 +7,6 @@ void main() {
   testWidgets('App has a title', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const PopulareApp());
-    expect(find.text('Startup name generator'), findsOneWidget);
+    expect(find.text('Chat with friends, Romans, countrymen'), findsOneWidget);
   });
 }

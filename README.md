@@ -2,7 +2,7 @@
 
 Available [on GitHub Pages](https://kostaleonard.github.io/populare/).
 
-*Code as social media.*
+*Chat with friends, Romans, countrymen.*
 
 Populare is a SaaS social media app in which all posts are code. Users can post
 in any language they want, as long as it's one of the following:
