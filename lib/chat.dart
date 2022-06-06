@@ -15,7 +15,7 @@ class _ChatWidgetState extends State<ChatWidget> {
   @override
   void initState() {
     super.initState();
-    _textEditingController = TextEditingController(text: 'Message');
+    _textEditingController = TextEditingController(text: '');
   }
 
   @override
@@ -29,6 +29,11 @@ class _ChatWidgetState extends State<ChatWidget> {
     return Scaffold(
         appBar:
             AppBar(title: const Text('Chat with friends, Romans, countrymen')),
-        body: TextField(controller: _textEditingController));
+        body: Container(
+          alignment: Alignment.bottomCenter,
+          child: TextFormField(
+              controller: _textEditingController,
+            decoration: const InputDecoration(border: OutlineInputBorder()))
+        ));
   }
 }
