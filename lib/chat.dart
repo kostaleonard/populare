@@ -31,7 +31,7 @@ class _ChatWidgetState extends State<ChatWidget> {
             AppBar(title: const Text('Chat with friends, Romans, countrymen')),
         body: Container(
           alignment: Alignment.bottomCenter,
-          child: TextFormField(
+          child: TextField(
               controller: _textEditingController,
             decoration: const InputDecoration(border: OutlineInputBorder()))
         ));
