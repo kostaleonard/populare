@@ -30,10 +30,19 @@ class _ChatWidgetState extends State<ChatWidget> {
         appBar:
             AppBar(title: const Text('Chat with friends, Romans, countrymen')),
         body: Container(
-          alignment: Alignment.bottomCenter,
-          child: TextField(
-              controller: _textEditingController,
-            decoration: const InputDecoration(border: OutlineInputBorder()))
-        ));
+            alignment: Alignment.bottomCenter,
+            child: TextField(
+                controller: _textEditingController,
+                decoration: const InputDecoration(
+                    border: OutlineInputBorder(), labelText: 'Message'),
+                onSubmitted: (String text) async {
+                  await showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                            title: const Text('Message posted'),
+                            content: Text('You posted "$text"'));
+                      });
+                })));
   }
 }
