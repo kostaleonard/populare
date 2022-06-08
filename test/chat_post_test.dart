@@ -1,7 +1,5 @@
 //Tests chat_post.dart.
 
-import 'dart:math';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:populare/chat_post.dart';
 
