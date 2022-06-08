@@ -6,8 +6,17 @@ import 'package:populare/chat.dart';
 
 void main() {
   testWidgets('Chat widget has a text box', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
     await tester.pumpWidget(const MaterialApp(home: ChatWidget()));
     expect(find.byType(TextField), findsOneWidget);
   });
+
+  testWidgets('Chat widget displays new message', (WidgetTester tester) async {
+    await tester.pumpWidget(const MaterialApp(home: ChatWidget()));
+    await tester.enterText(find.byType(TextField), 'sample post');
+    await tester.tap(find.byType(FloatingActionButton));
+    await tester.pump();
+    expect(find.text('sample post'), findsOneWidget);
+  });
+
+  //TODO add test for pressing enter key also posting
 }
