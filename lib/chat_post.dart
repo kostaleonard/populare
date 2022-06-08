@@ -1,10 +1,12 @@
 //Contains the ChatPost class.
 
 class ChatPost {
+  static const String anonymousAuthor = 'E pluribus unum';
   final String text;
   final String author;
   final DateTime createdAt;
 
-  //TODO if you don't specify createdAt, set to DateTime.now()
-  ChatPost({required this.text, required this.author, required this.createdAt});
+  ChatPost(
+      {required this.text, this.author = anonymousAuthor, DateTime? createdAt})
+      : createdAt = createdAt ?? DateTime.now();
 }
