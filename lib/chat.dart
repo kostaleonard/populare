@@ -33,14 +33,24 @@ class _ChatWidgetState extends State<ChatWidget> {
         body: Container(
             alignment: Alignment.bottomCenter,
             padding: const EdgeInsets.all(16.0),
-            child: TextField(
-                controller: _textEditingController,
-                decoration: const InputDecoration(
-                    border: OutlineInputBorder(), labelText: 'Message'),
-                onSubmitted: (String text) {
-                  final post = ChatPost(text: text);
-                  submitPost(post);
-                })));
+            child: Row(children: [
+              Expanded(
+                  child: TextField(
+                      controller: _textEditingController,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(), labelText: 'Message'),
+                      onSubmitted: (String text) {
+                        final post = ChatPost(text: text);
+                        submitPost(post);
+                      })),
+              Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: FloatingActionButton(
+                      child: const Icon(Icons.send),
+                      onPressed: () => {
+                            //TODO submit post, but call text field's onSubmitted
+                          }))
+            ])));
   }
 
   void submitPost(ChatPost post) {
