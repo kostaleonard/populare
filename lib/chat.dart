@@ -14,7 +14,7 @@ class _ChatWidgetState extends State<ChatWidget> {
   late TextEditingController _textEditingController;
   late FocusNode _textFieldFocusNode;
   final _biggerFont = const TextStyle(fontSize: 18);
-  List<ChatPost> posts = []; //TODO during initialization, (lazy) load from DB
+  List<ChatPost> posts = [];
 
   @override
   void initState() {
@@ -85,7 +85,7 @@ class _ChatWidgetState extends State<ChatWidget> {
     if (text.isEmpty) return;
     final post = ChatPost(text: text);
     setState(() {
-      posts.insert(0, post); //TODO change data structure so that add first and add last are O(1)
+      posts.insert(0, post);
     });
   }
 }
