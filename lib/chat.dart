@@ -12,6 +12,7 @@ class ChatWidget extends StatefulWidget {
 
 class _ChatWidgetState extends State<ChatWidget> {
   late TextEditingController _textEditingController;
+  final _biggerFont = const TextStyle(fontSize: 18);
   List<ChatPost> posts = []; //TODO during initialization, load from DB
 
   @override
@@ -31,30 +32,49 @@ class _ChatWidgetState extends State<ChatWidget> {
     return Scaffold(
         appBar:
             AppBar(title: const Text('Chat with friends, Romans, countrymen')),
-        body: Container(
-            alignment: Alignment.bottomCenter,
-            padding: const EdgeInsets.all(16.0),
-            child: Row(children: [
-              Expanded(
-                  child: TextField(
-                      controller: _textEditingController,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(), labelText: 'Message'),
-                      onSubmitted: (String text) {
-                        submitPost(text);
-                      })),
-              Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: FloatingActionButton(
-                      child: const Icon(Icons.send),
-                      onPressed: () {
-                        submitPost(_textEditingController.text);
-                      }))
-            ])));
+        body: Column(
+          children: [
+            Expanded(child: ListView.builder(
+              padding: const EdgeInsets.all(16.0),
+              itemCount: posts.length * 2,
+              itemBuilder: (context, i) {
+                if (i.isOdd) return const Divider();
+                final index = i ~/ 2;
+                final post = posts[index];
+                return ListTile(
+                  title: Text(post.text, style: _biggerFont)
+                );
+              },
+            )),
+            Container(
+                alignment: Alignment.bottomCenter,
+                padding: const EdgeInsets.all(16.0),
+                child: Row(children: [
+                  Expanded(
+                      child: TextField(
+                          controller: _textEditingController,
+                          decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'Message'),
+                          onSubmitted: (String text) {
+                            submitPost(text);
+                          })),
+                  Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: FloatingActionButton(
+                          child: const Icon(Icons.send),
+                          onPressed: () {
+                            submitPost(_textEditingController.text);
+                          }))
+                ]))
+          ],
+        ));
   }
 
   void submitPost(String text) {
     final post = ChatPost(text: text);
-    posts.add(post);
+    setState(() {
+      posts.add(post);
+    });
   }
 }
