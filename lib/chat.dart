@@ -12,18 +12,21 @@ class ChatWidget extends StatefulWidget {
 
 class _ChatWidgetState extends State<ChatWidget> {
   late TextEditingController _textEditingController;
+  late FocusNode _textFieldFocusNode;
   final _biggerFont = const TextStyle(fontSize: 18);
-  List<ChatPost> posts = []; //TODO during initialization, load from DB
+  List<ChatPost> posts = []; //TODO during initialization, (lazy) load from DB
 
   @override
   void initState() {
     super.initState();
     _textEditingController = TextEditingController(text: '');
+    _textFieldFocusNode = FocusNode();
   }
 
   @override
   void dispose() {
     _textEditingController.dispose();
+    _textFieldFocusNode.dispose();
     super.dispose();
   }
 
@@ -35,6 +38,7 @@ class _ChatWidgetState extends State<ChatWidget> {
         body: Column(
           children: [
             Expanded(child: ListView.builder(
+              reverse: true,
               padding: const EdgeInsets.all(16.0),
               itemCount: posts.length * 2,
               itemBuilder: (context, i) {
@@ -53,11 +57,14 @@ class _ChatWidgetState extends State<ChatWidget> {
                   Expanded(
                       child: TextField(
                           controller: _textEditingController,
+                          focusNode: _textFieldFocusNode,
                           decoration: const InputDecoration(
                               border: OutlineInputBorder(),
                               labelText: 'Message'),
                           onSubmitted: (String text) {
                             submitPost(text);
+                            _textEditingController.clear();
+                            _textFieldFocusNode.requestFocus();
                           })),
                   Padding(
                       padding: const EdgeInsets.only(left: 8.0),
@@ -72,9 +79,10 @@ class _ChatWidgetState extends State<ChatWidget> {
   }
 
   void submitPost(String text) {
+    if (text.isEmpty) return;
     final post = ChatPost(text: text);
     setState(() {
-      posts.add(post);
+      posts.insert(0, post); //TODO change data structure so that this is O(1)
     });
   }
 }
