@@ -19,4 +19,10 @@ void main() {
   });
 
   //TODO add test for pressing enter key also posting
+
+  //TODO test that we dispose resources properly, e.g., disposing the text editing controller
+
+  //TODO add tests for appending posts
+
+  //TODO add test for displaying posts in the correct order
 }

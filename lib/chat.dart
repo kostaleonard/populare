@@ -12,6 +12,7 @@ class ChatWidget extends StatefulWidget {
 
 class _ChatWidgetState extends State<ChatWidget> {
   late TextEditingController _textEditingController;
+  List<ChatPost> posts = []; //TODO during initialization, load from DB
 
   @override
   void initState() {
@@ -40,20 +41,20 @@ class _ChatWidgetState extends State<ChatWidget> {
                       decoration: const InputDecoration(
                           border: OutlineInputBorder(), labelText: 'Message'),
                       onSubmitted: (String text) {
-                        final post = ChatPost(text: text);
-                        submitPost(post);
+                        submitPost(text);
                       })),
               Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: FloatingActionButton(
                       child: const Icon(Icons.send),
-                      onPressed: () => {
-                            //TODO submit post, but call text field's onSubmitted
-                          }))
+                      onPressed: () {
+                        submitPost(_textEditingController.text);
+                      }))
             ])));
   }
 
-  void submitPost(ChatPost post) {
-    //TODO
+  void submitPost(String text) {
+    final post = ChatPost(text: text);
+    posts.add(post);
   }
 }
