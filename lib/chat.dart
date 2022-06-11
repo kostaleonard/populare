@@ -46,7 +46,9 @@ class _ChatWidgetState extends State<ChatWidget> {
                 final index = i ~/ 2;
                 final post = posts[index];
                 return ListTile(
-                  title: Text(post.text, style: _biggerFont)
+                  leading: const Icon(Icons.person),
+                  title: Text(post.text, style: _biggerFont),
+                  subtitle: Text('${post.author}, ${post.getDisplayDate()}'),
                 );
               },
             )),

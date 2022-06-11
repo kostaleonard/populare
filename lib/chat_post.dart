@@ -9,4 +9,9 @@ class ChatPost {
   ChatPost(
       {required this.text, this.author = anonymousAuthor, DateTime? createdAt})
       : createdAt = createdAt ?? DateTime.now();
+
+  String getDisplayDate() {
+    return '${createdAt.hour}:${createdAt.minute.toString().padLeft(2, '0')} '
+        'on ${createdAt.year}-${createdAt.month}-${createdAt.day}';
+  }
 }
