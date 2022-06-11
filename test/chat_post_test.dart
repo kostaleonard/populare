@@ -13,9 +13,10 @@ void main() {
   });
 
   test('Chat post created without DateTime uses current time', () {
-    DateTime start = DateTime.now();
+    //Adding/subtracting to bounds for stability in testing.
+    DateTime start = DateTime.now().subtract(const Duration(seconds: 1));
     final post = ChatPost(text: 'text', author: 'author');
-    DateTime end = DateTime.now();
+    DateTime end = DateTime.now().add(const Duration(seconds: 1));
     expect(start.isBefore(post.createdAt), true);
     expect(post.createdAt.isBefore(end), true);
   });
