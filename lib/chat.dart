@@ -75,6 +75,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                           child: const Icon(Icons.send),
                           onPressed: () {
                             submitPost(_textEditingController.text);
+                            _textEditingController.clear();
                           }))
                 ]))
           ],
