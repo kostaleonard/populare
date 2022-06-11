@@ -37,7 +37,8 @@ class _ChatWidgetState extends State<ChatWidget> {
             AppBar(title: const Text('Chat with friends, Romans, countrymen')),
         body: Column(
           children: [
-            Expanded(child: ListView.builder(
+            Expanded(
+                child: ListView.builder(
               reverse: true,
               padding: const EdgeInsets.all(16.0),
               itemCount: posts.length * 2,
@@ -84,7 +85,7 @@ class _ChatWidgetState extends State<ChatWidget> {
     if (text.isEmpty) return;
     final post = ChatPost(text: text);
     setState(() {
-      posts.insert(0, post); //TODO change data structure so that this is O(1)
+      posts.insert(0, post); //TODO change data structure so that add first and add last are O(1)
     });
   }
 }

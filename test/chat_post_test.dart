@@ -24,4 +24,6 @@ void main() {
     final post = ChatPost(text: 'text');
     expect(post.author, equals(ChatPost.anonymousAuthor));
   });
+
+  //TODO test display date
 }
