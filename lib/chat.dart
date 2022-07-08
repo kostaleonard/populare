@@ -83,7 +83,7 @@ class _ChatWidgetState extends State<ChatWidget> {
   }
 
   void submitPost(String text) {
-    if (text.isEmpty) return;
+    if (text.trim().isEmpty) return;
     final post = ChatPost(text: text);
     setState(() {
       posts.insert(0, post);

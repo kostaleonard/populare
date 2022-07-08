@@ -46,4 +46,9 @@ void main() {
     final post = ChatPost(text: 'text', createdAt: date);
     expect(post.getDisplayDate(), '14:20 on 2022-1-2');
   });
+
+  test('Chat post created with whitespace-only text raises error', () {
+    expect(() => ChatPost(text: ' '), throwsArgumentError);
+    expect(() => ChatPost(text: '\t'), throwsArgumentError);
+  });
 }

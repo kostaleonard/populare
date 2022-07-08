@@ -8,8 +8,11 @@ class ChatPost {
 
   ChatPost(
       {required this.text, this.author = anonymousAuthor, DateTime? createdAt})
-      : createdAt = createdAt ?? DateTime.now();
-
+      : createdAt = createdAt ?? DateTime.now() {
+    if (text.trim().isEmpty) {
+      throw ArgumentError('ChatPost text must not be whitespace-only');
+    }
+  }
 
   String getDisplayDate() {
     return '${createdAt.hour}:${createdAt.minute.toString().padLeft(2, '0')} '
