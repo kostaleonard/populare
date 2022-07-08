@@ -46,11 +46,4 @@ void main() {
     final post = ChatPost(text: 'text', createdAt: date);
     expect(post.getDisplayDate(), '14:20 on 2022-1-2');
   });
-
-  test('Chat post has non-empty String UUID', () {
-    final post = ChatPost(text: 'text');
-    expect(post.uuid, isNotEmpty);
-  });
-
-  //Test that chat posts get globally unique UUIDs--how to prevent collisions?
 }
