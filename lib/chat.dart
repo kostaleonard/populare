@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:populare/chat_post.dart';
+import 'package:populare/chat_post_candidate.dart';
 
 class ChatWidget extends StatefulWidget {
   const ChatWidget({Key? key}) : super(key: key);
@@ -84,7 +85,14 @@ class _ChatWidgetState extends State<ChatWidget> {
 
   void submitPost(String text) {
     if (text.trim().isEmpty) return;
-    final post = ChatPost(text: text);
+    final postCandidate = ChatPostCandidate(text: text);
+    //TODO write to database
+    //TODO read from database (may be automatic with setState)
+    final post = ChatPost(
+        id: -1,
+        text: postCandidate.text,
+        author: postCandidate.author,
+        createdAt: postCandidate.createdAt);
     setState(() {
       posts.insert(0, post);
     });

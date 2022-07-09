@@ -68,14 +68,14 @@ void main() {
   });
 
   testWidgets('Whitespace only posts are not submitted',
-          (WidgetTester tester) async {
-        await tester.pumpWidget(const MaterialApp(home: ChatWidget()));
-        await tester.enterText(find.byType(TextField), ' ');
-        await tester.tap(find.byType(FloatingActionButton));
-        await tester.pump();
-        await tester.enterText(find.byType(TextField), '\t');
-        await tester.tap(find.byType(FloatingActionButton));
-        await tester.pump();
-        expect(find.byType(ListTile), findsNothing);
-      });
+      (WidgetTester tester) async {
+    await tester.pumpWidget(const MaterialApp(home: ChatWidget()));
+    await tester.enterText(find.byType(TextField), ' ');
+    await tester.tap(find.byType(FloatingActionButton));
+    await tester.pump();
+    await tester.enterText(find.byType(TextField), '\t');
+    await tester.tap(find.byType(FloatingActionButton));
+    await tester.pump();
+    expect(find.byType(ListTile), findsNothing);
+  });
 }

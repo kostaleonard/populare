@@ -1,5 +1,5 @@
 //Contains the ChatPostCandidate class.
-//ChatPostCandidates are posted to the database.
+//ChatPostCandidates are written to the database, not read (diode).
 
 class ChatPostCandidate {
   static const String anonymousAuthor = 'E pluribus unum';
@@ -13,10 +13,5 @@ class ChatPostCandidate {
     if (text.trim().isEmpty) {
       throw ArgumentError('ChatPost text must not be whitespace-only');
     }
-  }
-
-  String getDisplayDate() {
-    return '${createdAt.hour}:${createdAt.minute.toString().padLeft(2, '0')} '
-        'on ${createdAt.year}-${createdAt.month}-${createdAt.day}';
   }
 }

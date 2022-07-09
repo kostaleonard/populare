@@ -1,5 +1,5 @@
 //Contains the ChatPost class.
-//ChatPosts are retrieved from the database.
+//ChatPosts are read from the database, not written (diode).
 
 class ChatPost {
   final int id;
