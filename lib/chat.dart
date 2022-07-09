@@ -88,6 +88,7 @@ class _ChatWidgetState extends State<ChatWidget> {
     final postCandidate = ChatPostCandidate(text: text);
     //TODO write to database
     //TODO read from database (may be automatic with setState)
+    //TODO remove this post
     final post = ChatPost(
         id: -1,
         text: postCandidate.text,
