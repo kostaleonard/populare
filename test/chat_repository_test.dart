@@ -1,6 +1,7 @@
 //Tests chat_repository.dart.
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:populare/chat_post_candidate.dart';
 import 'package:populare/chat_repository.dart';
 
 const String localDbProxyUri = 'http://localhost:8000/';
@@ -36,5 +37,26 @@ void main() {
     final response = await chatRepository.getDbProxyHealth();
     expect(response.statusCode, 200);
     expect(response.body, 'ok');
+  });
+
+  test('createPost returns new post from candidate', () async {
+    final chatRepository = ChatRepository(dbProxyUri: localDbProxyUri);
+    final postCandidate = ChatPostCandidate(text: 'text');
+    final post = await chatRepository.createPost(postCandidate);
+    expect(post.text, postCandidate.text);
+    expect(post.author, postCandidate.author);
+    expect(post.createdAt, postCandidate.createdAt);
+  });
+
+  test('readPosts returns created posts', () async {
+    final chatRepository = ChatRepository(dbProxyUri: localDbProxyUri);
+    final postCandidate = ChatPostCandidate(text: 'text');
+    final post = await chatRepository.createPost(postCandidate);
+    final posts = await chatRepository.readPosts();
+    expect(posts.length, 1);
+    expect(posts[0].id, post.id);
+    expect(posts[0].text, post.text);
+    expect(posts[0].author, post.author);
+    expect(posts[0].createdAt, post.createdAt);
   });
 }

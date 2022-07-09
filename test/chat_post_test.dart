@@ -18,7 +18,7 @@ void main() {
       'id': 1,
       'text': 'text',
       'author': 'author',
-      'createdAt': '2022-01-01T00:00:00'
+      'created_at': '2022-01-01T00:00:00'
     });
     expect(post.id, equals(1));
     expect(post.text, equals('text'));
