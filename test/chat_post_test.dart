@@ -13,6 +13,19 @@ void main() {
     expect(post.createdAt, equals(DateTime(2022)));
   });
 
+  test('Chat post fromJSON constructor', () {
+    final post = ChatPost.fromJSON({
+      'id': 1,
+      'text': 'text',
+      'author': 'author',
+      'createdAt': '2022-01-01T00:00:00'
+    });
+    expect(post.id, equals(1));
+    expect(post.text, equals('text'));
+    expect(post.author, equals('author'));
+    expect(post.createdAt, equals(DateTime(2022)));
+  });
+
   test('getDisplayDate returns expected format', () {
     //12:20:15.999 on January 2nd, 2022.
     final date = DateTime(2022, 1, 2, 12, 20, 15, 999);
