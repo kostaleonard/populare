@@ -9,7 +9,6 @@ import 'package:populare/chat_repository.dart';
 import 'chat_repository_test.mocks.dart';
 
 const String localDbProxyUri = 'http://localhost:8000/';
-//TODO generate mocks in CI pipeline
 
 @GenerateMocks([http.Client])
 void main() {
@@ -64,6 +63,19 @@ void main() {
     expect(post.text, postCandidate.text);
     expect(post.author, postCandidate.author);
     expect(post.createdAt, postCandidate.createdAt);
+  });
+
+  test('createPost throws error on bad connection', () async {
+    final client = MockClient();
+    final chatRepository =
+        ChatRepository(dbProxyUri: localDbProxyUri, client: client);
+    when(client.post(Uri.parse(chatRepository.dbProxyGraphqlUri),
+            headers: ChatRepository.headers,
+            body: argThat(startsWith('{ createPost'), named: 'body')))
+        .thenAnswer((_) async => http.Response('bad', 404));
+    final postCandidate = ChatPostCandidate(text: 'text');
+    expect(() async => await chatRepository.createPost(postCandidate),
+        throwsA(isA<DbProxyCommunicationException>()));
   });
 
   test('readPosts returns created posts', () async {
@@ -127,5 +139,15 @@ void main() {
     expect(posts[0].text, 'text1');
   }, skip: 'Integration test; requires database proxy');
 
-  //TODO test bad connections
+  test('readPosts throws error on bad connection', () async {
+    final client = MockClient();
+    final chatRepository =
+        ChatRepository(dbProxyUri: localDbProxyUri, client: client);
+    when(client.post(Uri.parse(chatRepository.dbProxyGraphqlUri),
+            headers: ChatRepository.headers,
+            body: argThat(startsWith('{ readPosts'), named: 'body')))
+        .thenAnswer((_) async => http.Response('bad', 404));
+    expect(() async => await chatRepository.readPosts(),
+        throwsA(isA<DbProxyCommunicationException>()));
+  });
 }

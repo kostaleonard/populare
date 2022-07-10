@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 import 'package:populare/chat_post.dart';
 import 'package:populare/chat_post_candidate.dart';
 
-//TODO need try-catch around HTTP methods--potentially null results
 class ChatRepository {
   final String dbProxyUri;
   final String dbProxyHealthUri;
@@ -42,6 +41,9 @@ class ChatRepository {
         'createdAt: "${postCandidate.createdAt.toIso8601String()}") }';
     final response = await client.post(Uri.parse(dbProxyGraphqlUri),
         headers: ChatRepository.headers, body: body);
+    if (response.statusCode != 200) {
+      throw DbProxyCommunicationException('Could not reach database proxy');
+    }
     return ChatPost.fromJSON(
         jsonDecode(jsonDecode(response.body)['data']['createPost']));
   }
@@ -55,10 +57,18 @@ class ChatRepository {
     final body = '{ readPosts$args }';
     final response = await client.post(Uri.parse(dbProxyGraphqlUri),
         headers: ChatRepository.headers, body: body);
+    if (response.statusCode != 200) {
+      throw DbProxyCommunicationException('Could not reach database proxy');
+    }
     final List<dynamic> postJSONs =
         jsonDecode(response.body)['data']['readPosts'];
     return postJSONs
         .map((postStr) => ChatPost.fromJSON(jsonDecode(postStr)))
         .toList();
   }
+}
+
+class DbProxyCommunicationException implements Exception {
+  final String cause;
+  DbProxyCommunicationException(String? cause) : cause = cause ?? '';
 }
