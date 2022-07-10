@@ -65,12 +65,43 @@ class _ChatWidgetState extends State<ChatWidget> {
                   } else {
                     return Column(
                       children: [
+                        FutureBuilder<List<ChatPost>>(
+                            future: readPostsQuery,
+                            builder: (BuildContext context,
+                                AsyncSnapshot<List<ChatPost>> snapshot) {
+                              switch (snapshot.connectionState) {
+                                case ConnectionState.none:
+                                  return Container();
+                                case ConnectionState.waiting:
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                default:
+                                  if (snapshot.hasError) {
+                                    return Center(
+                                        child: Text(
+                                            'No connection; try again later',
+                                            style: _biggerFont));
+                                  } else {
+                                    final postsToAdd = snapshot.data ?? [];
+                                    readPostsQuery = Future.value([]);
+                                    if (postsToAdd.isNotEmpty) {
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback(
+                                              (_) => setState(() {
+                                                    posts.addAll(postsToAdd);
+                                                  }));
+                                    }
+                                    return Container();
+                                  }
+                              }
+                            }),
                         Expanded(
                             child: ListView.builder(
                           reverse: true,
                           padding: const EdgeInsets.all(16.0),
                           itemCount: posts.length * 2,
                           itemBuilder: (context, i) {
+                            //TODO is this where we add a readPosts query?
                             if (i.isOdd) return const Divider();
                             final index = i ~/ 2;
                             final post = posts[index];
@@ -118,8 +149,8 @@ class _ChatWidgetState extends State<ChatWidget> {
     if (text.trim().isEmpty) return;
     final postCandidate = ChatPostCandidate(text: text);
     //TODO write to database
-    //TODO read from database (may be automatic with setState)
-    //TODO remove this post
+    //TODO read from database to see new post
+    //TODO remove this post below
     final post = ChatPost(
         id: -1,
         text: postCandidate.text,
