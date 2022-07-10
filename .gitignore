@@ -1,3 +1,6 @@
+# Custom
+*.mocks.dart
+
 # Miscellaneous
 *.class
 *.log

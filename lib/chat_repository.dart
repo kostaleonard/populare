@@ -12,14 +12,16 @@ class ChatRepository {
   final String dbProxyUri;
   final String dbProxyHealthUri;
   final String dbProxyGraphqlUri;
+  final http.Client client;
   static const Map<String, String> headers = {
     'Content-Type': 'application/graphql'
   };
   static const defaultReadLimit = 50;
 
-  ChatRepository({required this.dbProxyUri})
+  ChatRepository({required this.dbProxyUri, http.Client? client})
       : dbProxyHealthUri = ChatRepository._buildHealthUri(dbProxyUri),
-        dbProxyGraphqlUri = ChatRepository._buildGraphqlUri(dbProxyUri);
+        dbProxyGraphqlUri = ChatRepository._buildGraphqlUri(dbProxyUri),
+        client = client ?? http.Client();
 
   static String _buildHealthUri(String dbProxyUri) {
     return path.join(dbProxyUri, 'health');
@@ -30,7 +32,7 @@ class ChatRepository {
   }
 
   Future<http.Response> getDbProxyHealth() {
-    return http.get(Uri.parse(dbProxyHealthUri));
+    return client.get(Uri.parse(dbProxyHealthUri));
   }
 
   Future<ChatPost> createPost(ChatPostCandidate postCandidate) async {
@@ -38,7 +40,7 @@ class ChatRepository {
         'text: "${postCandidate.text}", '
         'author: "${postCandidate.author}", '
         'createdAt: "${postCandidate.createdAt.toIso8601String()}") }';
-    final response = await http.post(Uri.parse(dbProxyGraphqlUri),
+    final response = await client.post(Uri.parse(dbProxyGraphqlUri),
         headers: ChatRepository.headers, body: body);
     return ChatPost.fromJSON(
         jsonDecode(jsonDecode(response.body)['data']['createPost']));
@@ -51,7 +53,7 @@ class ChatRepository {
     final beforeStr = 'before: "${before.toIso8601String()}"';
     final args = '(${[limitStr, beforeStr].join(', ')})';
     final body = '{ readPosts$args }';
-    final response = await http.post(Uri.parse(dbProxyGraphqlUri),
+    final response = await client.post(Uri.parse(dbProxyGraphqlUri),
         headers: ChatRepository.headers, body: body);
     final List<dynamic> postJSONs =
         jsonDecode(response.body)['data']['readPosts'];

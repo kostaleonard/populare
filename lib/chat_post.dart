@@ -14,10 +14,10 @@ class ChatPost {
       required this.createdAt});
 
   ChatPost.fromJSON(Map<String, dynamic> json)
-    : id = json['id'] as int,
-      text = json['text'] as String,
-      author = json['author'] as String,
-      createdAt = DateTime.parse(json['created_at'] as String);
+      : id = json['id'] as int,
+        text = json['text'] as String,
+        author = json['author'] as String,
+        createdAt = DateTime.parse(json['created_at'] as String);
 
   String getDisplayDate() {
     return '${createdAt.hour}:${createdAt.minute.toString().padLeft(2, '0')} '
