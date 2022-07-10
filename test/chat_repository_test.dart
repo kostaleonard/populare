@@ -8,11 +8,6 @@ const String localDbProxyUri = 'http://localhost:8000/';
 //TODO mock http responses for tests
 
 void main() {
-  test('Chat repository initialized with empty post list', () {
-    final chatRepository = ChatRepository(dbProxyUri: localDbProxyUri);
-    expect(chatRepository.posts, isEmpty);
-  });
-
   test('Chat repository initialized with health endpoint', () {
     const String proxyUri = 'http://localhost:8000/';
     final chatRepository = ChatRepository(dbProxyUri: proxyUri);

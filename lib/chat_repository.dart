@@ -12,16 +12,13 @@ class ChatRepository {
   final String dbProxyUri;
   final String dbProxyHealthUri;
   final String dbProxyGraphqlUri;
-  //TODO I am thinking that this class does not need to have the posts list
-  final List<ChatPost> posts;
   static const Map<String, String> headers = {
     'Content-Type': 'application/graphql'
   };
   static const defaultReadLimit = 50;
 
   ChatRepository({required this.dbProxyUri})
-      : posts = [],
-        dbProxyHealthUri = ChatRepository._buildHealthUri(dbProxyUri),
+      : dbProxyHealthUri = ChatRepository._buildHealthUri(dbProxyUri),
         dbProxyGraphqlUri = ChatRepository._buildGraphqlUri(dbProxyUri);
 
   static String _buildHealthUri(String dbProxyUri) {
