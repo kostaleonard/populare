@@ -18,6 +18,6 @@ class PopulareApp extends StatelessWidget {
           appBarTheme: const AppBarTheme(
               backgroundColor: Colors.indigo, foregroundColor: Colors.white),
         ),
-        home: const ChatWidget());
+        home: ChatWidget());
   }
 }
