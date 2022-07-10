@@ -12,10 +12,12 @@ class ChatRepository {
   final String dbProxyUri;
   final String dbProxyHealthUri;
   final String dbProxyGraphqlUri;
+  //TODO I am thinking that this class does not need to have the posts list
   final List<ChatPost> posts;
   static const Map<String, String> headers = {
     'Content-Type': 'application/graphql'
   };
+  static const defaultReadLimit = 50;
 
   ChatRepository({required this.dbProxyUri})
       : posts = [],
@@ -45,21 +47,12 @@ class ChatRepository {
         jsonDecode(jsonDecode(response.body)['data']['createPost']));
   }
 
-  Future<List<ChatPost>> readPosts({int? limit, DateTime? before}) async {
-    var args = '';
-    if (limit != null || before != null) {
-      args = '(';
-      var limitStr = '';
-      if (limit != null) {
-        limitStr = 'limit: $limit';
-      }
-      var beforeStr = '';
-      if (before != null) {
-        beforeStr = 'before: ${before.toIso8601String()}';
-      }
-      args += [limitStr, beforeStr].join(', ');
-      args += ')';
-    }
+  Future<List<ChatPost>> readPosts(
+      {int limit = ChatRepository.defaultReadLimit, DateTime? before}) async {
+    before ??= DateTime.now();
+    final limitStr = 'limit: $limit';
+    final beforeStr = 'before: "${before.toIso8601String()}"';
+    final args = '(${[limitStr, beforeStr].join(', ')})';
     final body = '{ readPosts$args }';
     final response = await http.post(Uri.parse(dbProxyGraphqlUri),
         headers: ChatRepository.headers, body: body);

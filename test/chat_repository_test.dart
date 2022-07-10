@@ -59,4 +59,35 @@ void main() {
     expect(posts[0].author, post.author);
     expect(posts[0].createdAt, post.createdAt);
   });
+
+  test('readPosts uses limit', () async {
+    final chatRepository = ChatRepository(dbProxyUri: localDbProxyUri);
+    const numPosts = 3;
+    for (var idx = 0; idx < numPosts; idx++) {
+      final postCandidate = ChatPostCandidate(text: 'text$idx');
+      await chatRepository.createPost(postCandidate);
+    }
+    final posts = await chatRepository.readPosts(limit: numPosts - 1);
+    expect(posts.length, numPosts - 1);
+  });
+
+  test('readPosts uses before', () async {
+    final chatRepository = ChatRepository(dbProxyUri: localDbProxyUri);
+    final postCandidate1 = ChatPostCandidate(text: 'text1');
+    await Future.delayed(const Duration(milliseconds: 10));
+    final before = DateTime.now();
+    await Future.delayed(const Duration(milliseconds: 10));
+    final postCandidate2 = ChatPostCandidate(text: 'text2');
+    final postCandidate3 = ChatPostCandidate(text: 'text3');
+    await chatRepository.createPost(postCandidate1);
+    await chatRepository.createPost(postCandidate2);
+    await chatRepository.createPost(postCandidate3);
+    final posts = await chatRepository.readPosts(before: before);
+    expect(posts.length, 1);
+    expect(posts[0].text, 'text1');
+  });
+
+  //TODO add mocking
+
+  //TODO test bad connections
 }
