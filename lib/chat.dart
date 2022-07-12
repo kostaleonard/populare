@@ -23,6 +23,7 @@ class _ChatWidgetState extends State<ChatWidget> {
   late ChatRepository chatRepository;
   late Future<http.Response> healthQuery;
   late Future<List<ChatPost>> readPostsQuery;
+  Future<ChatPost>? createPostQuery;
   late TextEditingController _textEditingController;
   late FocusNode _textFieldFocusNode;
   final _biggerFont = const TextStyle(fontSize: 18);
@@ -89,6 +90,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                                           .addPostFrameCallback(
                                               (_) => setState(() {
                                                     posts.addAll(postsToAdd);
+                                                    //TODO we're going to have to be smart about how we add posts
                                                   }));
                                     }
                                     return Container();
@@ -102,6 +104,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                           itemCount: posts.length * 2,
                           itemBuilder: (context, i) {
                             //TODO is this where we add a readPosts query?
+                            //TODO only make query every 60 seconds if no results from previous query
                             if (i.isOdd) return const Divider();
                             final index = i ~/ 2;
                             final post = posts[index];
@@ -117,6 +120,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                             alignment: Alignment.bottomCenter,
                             padding: const EdgeInsets.all(16.0),
                             child: Row(children: [
+                              //TODO both textfield and button submit should scroll back to the bottom of the feed--add issue
                               Expanded(
                                   child: TextField(
                                       controller: _textEditingController,
@@ -148,16 +152,9 @@ class _ChatWidgetState extends State<ChatWidget> {
   void submitPost(String text) {
     if (text.trim().isEmpty) return;
     final postCandidate = ChatPostCandidate(text: text);
-    //TODO write to database
-    //TODO read from database to see new post
-    //TODO remove this post below
-    final post = ChatPost(
-        id: -1,
-        text: postCandidate.text,
-        author: postCandidate.author,
-        createdAt: postCandidate.createdAt);
-    setState(() {
-      posts.insert(0, post);
-    });
+    createPostQuery = chatRepository.createPost(postCandidate);
+    createPostQuery?.then((post) => setState(() {
+          posts.insert(0, post);
+        }));
   }
 }
