@@ -1,7 +1,7 @@
 //Contains the ChatPost class.
 //ChatPosts are read from the database, not written (diode).
 
-class ChatPost {
+class ChatPost implements Comparable<ChatPost> {
   final int id;
   final String text;
   final String author;
@@ -22,5 +22,15 @@ class ChatPost {
   String getDisplayDate() {
     return '${createdAt.hour}:${createdAt.minute.toString().padLeft(2, '0')} '
         'on ${createdAt.year}-${createdAt.month}-${createdAt.day}';
+  }
+
+  @override
+  int compareTo(ChatPost other) {
+    if (id == other.id) {
+      return 0;
+    }
+    final dateComparison = createdAt.compareTo(other.createdAt);
+    //If the dates are equal, just return some arbitrary order (compare IDs).
+    return dateComparison == 0 ? id.compareTo(other.id) : dateComparison;
   }
 }

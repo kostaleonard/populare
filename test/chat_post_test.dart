@@ -49,4 +49,51 @@ void main() {
         ChatPost(id: 1, text: 'text', author: 'author', createdAt: date);
     expect(post.getDisplayDate(), '14:20 on 2022-1-2');
   });
+
+  test('compareTo returns equal if IDs match', () {
+    final post1 = ChatPost(
+        id: 1,
+        text: 'text1',
+        author: 'author1',
+        createdAt: DateTime(2022, 1, 1, 12));
+    final post2 = ChatPost(
+        id: 1,
+        text: 'text2',
+        author: 'author2',
+        createdAt: DateTime(2022, 1, 2, 12));
+    expect(post1.compareTo(post2), 0);
+    expect(post2.compareTo(post1), 0);
+  });
+
+  test('compareTo returns date compareTo if IDs do not match', () {
+    final post1 = ChatPost(
+        id: 1,
+        text: 'text',
+        author: 'author',
+        createdAt: DateTime(2022, 1, 1, 12));
+    final post2 = ChatPost(
+        id: 2,
+        text: 'text',
+        author: 'author',
+        createdAt: DateTime(2022, 1, 2, 12));
+    expect(post1.compareTo(post2), lessThan(0));
+    expect(post2.compareTo(post1), greaterThan(0));
+  });
+
+  test(
+      'compareTo returns ID comparison (arbitrary order, but not equal) if dates match',
+      () {
+    final post1 = ChatPost(
+        id: 1,
+        text: 'text',
+        author: 'author',
+        createdAt: DateTime(2022, 1, 1, 12));
+    final post2 = ChatPost(
+        id: 2,
+        text: 'text',
+        author: 'author',
+        createdAt: DateTime(2022, 1, 1, 12));
+    expect(post1.compareTo(post2), isNot(0));
+    expect(post2.compareTo(post1), isNot(0));
+  });
 }
