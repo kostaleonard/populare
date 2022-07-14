@@ -15,7 +15,7 @@ class ChatRepository {
   static const Map<String, String> headers = {
     'Content-Type': 'application/graphql'
   };
-  static const defaultReadLimit = 50;
+  static const defaultReadLimit = 20;
 
   ChatRepository({required this.dbProxyUri, http.Client? client})
       : dbProxyHealthUri = ChatRepository._buildHealthUri(dbProxyUri),

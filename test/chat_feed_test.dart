@@ -14,6 +14,16 @@ void main() {
     expect(feed.getPosts(), isEmpty);
   });
 
+  test('length returns feed length', () {
+    final feed = ChatFeed();
+    final post1 = ChatPost(
+        id: 1, text: 'text1', author: 'author1', createdAt: DateTime(2022, 1, 1, 12));
+    final post2 = ChatPost(
+        id: 2, text: 'text2', author: 'author2', createdAt: DateTime(2022, 1, 2, 12));
+    feed.addPosts([post1, post2]);
+    expect(feed.length(), 2);
+  });
+
   test('Chat feed adds posts', () {
     final feed = ChatFeed();
     final post = ChatPost(

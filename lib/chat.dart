@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:populare/chat_feed.dart';
 import 'package:populare/chat_post.dart';
 import 'package:populare/chat_post_candidate.dart';
 import 'package:populare/chat_repository.dart';
@@ -27,7 +28,7 @@ class _ChatWidgetState extends State<ChatWidget> {
   late TextEditingController _textEditingController;
   late FocusNode _textFieldFocusNode;
   final _biggerFont = const TextStyle(fontSize: 18);
-  List<ChatPost> posts = [];
+  final feed = ChatFeed();
 
   @override
   void initState() {
@@ -89,8 +90,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                                       WidgetsBinding.instance
                                           .addPostFrameCallback(
                                               (_) => setState(() {
-                                                    posts.addAll(postsToAdd);
-                                                    //TODO we're going to have to be smart about how we add posts
+                                                    feed.addPosts(postsToAdd);
                                                   }));
                                     }
                                     return Container();
@@ -101,11 +101,12 @@ class _ChatWidgetState extends State<ChatWidget> {
                             child: ListView.builder(
                           reverse: true,
                           padding: const EdgeInsets.all(16.0),
-                          itemCount: posts.length * 2,
+                          itemCount: feed.length() * 2,
                           itemBuilder: (context, i) {
                             //TODO is this where we add a readPosts query?
                             //TODO only make query every 60 seconds if no results from previous query
                             if (i.isOdd) return const Divider();
+                            final posts = feed.getPosts();
                             final index = i ~/ 2;
                             final post = posts[index];
                             return ListTile(
@@ -154,7 +155,7 @@ class _ChatWidgetState extends State<ChatWidget> {
     final postCandidate = ChatPostCandidate(text: text);
     createPostQuery = chatRepository.createPost(postCandidate);
     createPostQuery?.then((post) => setState(() {
-          posts.insert(0, post);
-        }));
+      feed.addPost(post);
+    }));
   }
 }

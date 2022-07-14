@@ -8,6 +8,10 @@ class ChatFeed {
 
   ChatFeed() : _posts = SplayTreeSet();
 
+  int length() {
+    return _posts.length;
+  }
+
   List<ChatPost> getPosts() {
     return _posts.toList();
   }
