@@ -4,11 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:populare/chat.dart';
 
 void main() {
-  runApp(const PopulareApp());
+  runApp(PopulareApp());
 }
 
 class PopulareApp extends StatelessWidget {
-  const PopulareApp({Key? key}) : super(key: key);
+  final ChatWidget chatWidget;
+
+  PopulareApp({Key? key, ChatWidget? chatWidget})
+      : chatWidget = chatWidget ?? ChatWidget(),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +22,6 @@ class PopulareApp extends StatelessWidget {
           appBarTheme: const AppBarTheme(
               backgroundColor: Colors.indigo, foregroundColor: Colors.white),
         ),
-        home: ChatWidget());
+        home: chatWidget);
   }
 }

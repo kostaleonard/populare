@@ -76,8 +76,8 @@ void main() {
         text: 'text',
         author: 'author',
         createdAt: DateTime(2022, 1, 2, 12));
-    expect(post1.compareTo(post2), lessThan(0));
-    expect(post2.compareTo(post1), greaterThan(0));
+    expect(post1.compareTo(post2), greaterThan(0));
+    expect(post2.compareTo(post1), lessThan(0));
   });
 
   test(

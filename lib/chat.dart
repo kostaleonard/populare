@@ -9,6 +9,7 @@ import 'package:populare/chat_repository.dart';
 
 class ChatWidget extends StatefulWidget {
   final ChatRepository chatRepository;
+  //TODO connect based on environment variable
   static const String localDbProxyUri = 'http://localhost:8000/';
 
   ChatWidget({Key? key, ChatRepository? chatRepository})
@@ -112,9 +113,9 @@ class _ChatWidgetState extends State<ChatWidget> {
                               if (posts.isNotEmpty) {
                                 final earliestPost = posts[posts.length - 1];
                                 readPostsQuery.whenComplete(() {
-                                readPostsQuery = chatRepository.readPosts(
-                                    before: earliestPost.createdAt);
-                                setState(() {});
+                                  readPostsQuery = chatRepository.readPosts(
+                                      before: earliestPost.createdAt);
+                                  setState(() {});
                                 });
                               }
                               return Container();
@@ -166,7 +167,7 @@ class _ChatWidgetState extends State<ChatWidget> {
     final postCandidate = ChatPostCandidate(text: text);
     createPostQuery = chatRepository.createPost(postCandidate);
     createPostQuery?.then((post) => setState(() {
-      feed.addPost(post);
-    }));
+          feed.addPost(post);
+        }));
   }
 }

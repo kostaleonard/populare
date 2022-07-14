@@ -13,9 +13,15 @@ void main() {
   test('length returns feed length', () {
     final feed = ChatFeed();
     final post1 = ChatPost(
-        id: 1, text: 'text1', author: 'author1', createdAt: DateTime(2022, 1, 1, 12));
+        id: 1,
+        text: 'text1',
+        author: 'author1',
+        createdAt: DateTime(2022, 1, 1, 12));
     final post2 = ChatPost(
-        id: 2, text: 'text2', author: 'author2', createdAt: DateTime(2022, 1, 2, 12));
+        id: 2,
+        text: 'text2',
+        author: 'author2',
+        createdAt: DateTime(2022, 1, 2, 12));
     feed.addPosts([post1, post2]);
     expect(feed.length(), 2);
   });
@@ -33,9 +39,15 @@ void main() {
   test('Chat feed adds multiple posts', () {
     final feed = ChatFeed();
     final post1 = ChatPost(
-        id: 1, text: 'text1', author: 'author1', createdAt: DateTime(2022, 1, 1, 12));
+        id: 1,
+        text: 'text1',
+        author: 'author1',
+        createdAt: DateTime(2022, 1, 1, 12));
     final post2 = ChatPost(
-        id: 2, text: 'text2', author: 'author2', createdAt: DateTime(2022, 1, 2, 12));
+        id: 2,
+        text: 'text2',
+        author: 'author2',
+        createdAt: DateTime(2022, 1, 2, 12));
     feed.addPosts([post1, post2]);
     final posts = feed.getPosts();
     expect(posts.length, 2);
@@ -46,9 +58,15 @@ void main() {
   test('Chat feed does not add duplicate posts based on ID', () {
     final feed = ChatFeed();
     final post1 = ChatPost(
-        id: 1, text: 'text1', author: 'author1', createdAt: DateTime(2022, 1, 1, 12));
+        id: 1,
+        text: 'text1',
+        author: 'author1',
+        createdAt: DateTime(2022, 1, 1, 12));
     final post2 = ChatPost(
-        id: 1, text: 'text2', author: 'author2', createdAt: DateTime(2022, 1, 2, 12));
+        id: 1,
+        text: 'text2',
+        author: 'author2',
+        createdAt: DateTime(2022, 1, 2, 12));
     feed.addPost(post1);
     feed.addPost(post2);
     final posts = feed.getPosts();
@@ -61,15 +79,30 @@ void main() {
     final feed = ChatFeed();
     //Create posts in chronological order with one duplicate.
     final post1 = ChatPost(
-        id: 1, text: 'text1', author: 'author1', createdAt: DateTime(2022, 1, 1, 12));
+        id: 1,
+        text: 'text1',
+        author: 'author1',
+        createdAt: DateTime(2022, 1, 1, 12));
     final post2 = ChatPost(
-        id: 1, text: 'text2', author: 'author2', createdAt: DateTime(2022, 1, 2, 12));
+        id: 1,
+        text: 'text2',
+        author: 'author2',
+        createdAt: DateTime(2022, 1, 2, 12));
     final post3 = ChatPost(
-        id: 3, text: 'text3', author: 'author3', createdAt: DateTime(2022, 1, 1, 12));
+        id: 3,
+        text: 'text3',
+        author: 'author3',
+        createdAt: DateTime(2022, 1, 1, 12));
     final post4 = ChatPost(
-        id: 4, text: 'text4', author: 'author4', createdAt: DateTime(2022, 1, 4, 12));
+        id: 4,
+        text: 'text4',
+        author: 'author4',
+        createdAt: DateTime(2022, 1, 4, 12));
     final post5 = ChatPost(
-        id: 5, text: 'text5', author: 'author5', createdAt: DateTime(2022, 1, 4, 12));
+        id: 5,
+        text: 'text5',
+        author: 'author5',
+        createdAt: DateTime(2022, 1, 4, 12));
     //Add posts in arbitrary order.
     feed.addPost(post3);
     feed.addPost(post1);
