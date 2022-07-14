@@ -29,7 +29,8 @@ class ChatPost implements Comparable<ChatPost> {
     if (id == other.id) {
       return 0;
     }
-    final dateComparison = createdAt.compareTo(other.createdAt);
+    //Reverse the time sort order so that new posts are first.
+    final dateComparison = -createdAt.compareTo(other.createdAt);
     //If the dates are equal, just return some arbitrary order (compare IDs).
     return dateComparison == 0 ? id.compareTo(other.id) : dateComparison;
   }

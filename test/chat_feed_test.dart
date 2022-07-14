@@ -27,14 +27,14 @@ void main() {
   test('Chat feed adds multiple posts', () {
     final feed = ChatFeed();
     final post1 = ChatPost(
-        id: 1, text: 'text1', author: 'author1', createdAt: DateTime.now());
+        id: 1, text: 'text1', author: 'author1', createdAt: DateTime(2022, 1, 1, 12));
     final post2 = ChatPost(
-        id: 2, text: 'text2', author: 'author2', createdAt: DateTime.now());
+        id: 2, text: 'text2', author: 'author2', createdAt: DateTime(2022, 1, 2, 12));
     feed.addPosts([post1, post2]);
     final posts = feed.getPosts();
     expect(posts.length, 2);
-    expect(posts[0].id, 1);
-    expect(posts[1].id, 2);
+    expect(posts[0].id, 2);
+    expect(posts[1].id, 1);
   });
 
   test('Chat feed does not add duplicate posts based on ID', () {
@@ -73,9 +73,9 @@ void main() {
     //Posts should be sorted and have no duplicates.
     final posts = feed.getPosts();
     expect(posts.length, 4);
-    expect(posts[0].id, 1);
-    expect(posts[1].id, 3);
-    expect(posts[2].id, 4);
-    expect(posts[3].id, 5);
+    expect(posts[0].id, 4);
+    expect(posts[1].id, 5);
+    expect(posts[2].id, 1);
+    expect(posts[3].id, 3);
   });
 }
