@@ -1,9 +1,5 @@
 //Tests chat_feed.dart.
 
-//TODO test sort order
-
-//TODO test no duplicates based on ID field
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:populare/chat_post.dart';
 import 'package:populare/chat_feed.dart';

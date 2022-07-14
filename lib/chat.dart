@@ -24,6 +24,7 @@ class _ChatWidgetState extends State<ChatWidget> {
   late ChatRepository chatRepository;
   late Future<http.Response> healthQuery;
   late Future<List<ChatPost>> readPostsQuery;
+  //TODO add reading on a timer so we get most recent posts.
   Future<ChatPost>? createPostQuery;
   late TextEditingController _textEditingController;
   late FocusNode _textFieldFocusNode;
@@ -101,13 +102,23 @@ class _ChatWidgetState extends State<ChatWidget> {
                             child: ListView.builder(
                           reverse: true,
                           padding: const EdgeInsets.all(16.0),
-                          itemCount: feed.length() * 2,
+                          //Add an extra item to the list to trigger query.
+                          itemCount: feed.length() * 2 + 1,
                           itemBuilder: (context, i) {
-                            //TODO is this where we add a readPosts query?
-                            //TODO only make query every 60 seconds if no results from previous query
                             if (i.isOdd) return const Divider();
                             final posts = feed.getPosts();
                             final index = i ~/ 2;
+                            if (index >= posts.length) {
+                              if (posts.isNotEmpty) {
+                                final earliestPost = posts[posts.length - 1];
+                                readPostsQuery.whenComplete(() {
+                                readPostsQuery = chatRepository.readPosts(
+                                    before: earliestPost.createdAt);
+                                setState(() {});
+                                });
+                              }
+                              return Container();
+                            }
                             final post = posts[index];
                             return ListTile(
                               leading: const Icon(Icons.person),
