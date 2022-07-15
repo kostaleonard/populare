@@ -11,6 +11,8 @@ jobs:
         run: flutter pub get
       - name: Format
         run: flutter format --set-exit-if-changed .
+      - name: Generate mocks
+        run: flutter pub run build_runner build
       - name: Lint
         run: flutter analyze
       - name: Test
