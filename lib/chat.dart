@@ -9,7 +9,6 @@ import 'package:populare/chat_repository.dart';
 
 class ChatWidget extends StatefulWidget {
   final ChatRepository chatRepository;
-  //TODO connect based on environment variable
   static const String localDbProxyUri = 'http://localhost:8000/';
 
   ChatWidget({Key? key, ChatRepository? chatRepository})
@@ -25,7 +24,6 @@ class _ChatWidgetState extends State<ChatWidget> {
   late ChatRepository chatRepository;
   late Future<http.Response> healthQuery;
   late Future<List<ChatPost>> readPostsQuery;
-  //TODO add reading on a timer so we get most recent posts.
   Future<ChatPost>? createPostQuery;
   late TextEditingController _textEditingController;
   late FocusNode _textFieldFocusNode;
@@ -133,7 +131,6 @@ class _ChatWidgetState extends State<ChatWidget> {
                             alignment: Alignment.bottomCenter,
                             padding: const EdgeInsets.all(16.0),
                             child: Row(children: [
-                              //TODO both textfield and button submit should scroll back to the bottom of the feed--add issue
                               Expanded(
                                   child: TextField(
                                       controller: _textEditingController,
