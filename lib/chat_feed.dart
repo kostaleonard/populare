@@ -23,4 +23,8 @@ class ChatFeed {
   void addPosts(Iterable<ChatPost> posts) {
     posts.forEach(addPost);
   }
+
+  Set<ChatPost> getUnseenPosts(Iterable<ChatPost> posts) {
+    return posts.toSet().difference(_posts);
+  }
 }

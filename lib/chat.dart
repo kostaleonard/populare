@@ -1,5 +1,6 @@
 //Contains the chat widget.
 
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:populare/chat_feed.dart';
@@ -27,6 +28,8 @@ class _ChatWidgetState extends State<ChatWidget> {
   Future<ChatPost>? createPostQuery;
   late TextEditingController _textEditingController;
   late FocusNode _textFieldFocusNode;
+  late ScrollController _scrollController;
+  late Timer readPostsTimer;
   final _biggerFont = const TextStyle(fontSize: 18);
   final feed = ChatFeed();
 
@@ -38,12 +41,32 @@ class _ChatWidgetState extends State<ChatWidget> {
     readPostsQuery = chatRepository.readPosts();
     _textEditingController = TextEditingController(text: '');
     _textFieldFocusNode = FocusNode();
+    _scrollController = ScrollController();
+    readPostsTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+      readPostsQuery.whenComplete(() async {
+        //Check for recent posts.
+        readPostsQuery = chatRepository.readPosts();
+        final postsToAdd = await readPostsQuery;
+        if (postsToAdd.isNotEmpty &&
+            feed.getUnseenPosts(postsToAdd).isNotEmpty) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              setState(() {
+                feed.addPosts(postsToAdd);
+              });
+            }
+          });
+        }
+      });
+    });
   }
 
   @override
   void dispose() {
+    readPostsTimer.cancel();
     _textEditingController.dispose();
     _textFieldFocusNode.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -88,10 +111,13 @@ class _ChatWidgetState extends State<ChatWidget> {
                                     readPostsQuery = Future.value([]);
                                     if (postsToAdd.isNotEmpty) {
                                       WidgetsBinding.instance
-                                          .addPostFrameCallback(
-                                              (_) => setState(() {
-                                                    feed.addPosts(postsToAdd);
-                                                  }));
+                                          .addPostFrameCallback((_) {
+                                        if (mounted) {
+                                          setState(() {
+                                            feed.addPosts(postsToAdd);
+                                          });
+                                        }
+                                      });
                                     }
                                     return Container();
                                   }
@@ -100,6 +126,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                         Expanded(
                             child: ListView.builder(
                           reverse: true,
+                          controller: _scrollController,
                           padding: const EdgeInsets.all(16.0),
                           //Add an extra item to the list to trigger query.
                           itemCount: feed.length() * 2 + 1,
@@ -113,7 +140,12 @@ class _ChatWidgetState extends State<ChatWidget> {
                                 readPostsQuery.whenComplete(() {
                                   readPostsQuery = chatRepository.readPosts(
                                       before: earliestPost.createdAt);
-                                  setState(() {});
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((_) {
+                                    if (mounted) {
+                                      setState(() {});
+                                    }
+                                  });
                                 });
                               }
                               return Container();
@@ -141,6 +173,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                                       onSubmitted: (String text) {
                                         submitPost(text);
                                         _textEditingController.clear();
+                                        _scrollController.jumpTo(0);
                                         _textFieldFocusNode.requestFocus();
                                       })),
                               Padding(
@@ -149,6 +182,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                                       child: const Icon(Icons.send),
                                       onPressed: () {
                                         submitPost(_textEditingController.text);
+                                        _scrollController.jumpTo(0);
                                         _textEditingController.clear();
                                       }))
                             ]))
