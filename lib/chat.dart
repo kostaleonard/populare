@@ -47,12 +47,15 @@ class _ChatWidgetState extends State<ChatWidget> {
         //Check for recent posts.
         readPostsQuery = chatRepository.readPosts();
         final postsToAdd = await readPostsQuery;
-        if (postsToAdd.isNotEmpty && feed.getUnseenPosts(postsToAdd).isNotEmpty) {
-          WidgetsBinding.instance
-              .addPostFrameCallback(
-                  (_) => setState(() {
+        if (postsToAdd.isNotEmpty &&
+            feed.getUnseenPosts(postsToAdd).isNotEmpty) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              setState(() {
                 feed.addPosts(postsToAdd);
-              }));
+              });
+            }
+          });
         }
       });
     });
@@ -60,10 +63,10 @@ class _ChatWidgetState extends State<ChatWidget> {
 
   @override
   void dispose() {
+    readPostsTimer.cancel();
     _textEditingController.dispose();
     _textFieldFocusNode.dispose();
     _scrollController.dispose();
-    readPostsTimer.cancel();
     super.dispose();
   }
 
@@ -108,10 +111,13 @@ class _ChatWidgetState extends State<ChatWidget> {
                                     readPostsQuery = Future.value([]);
                                     if (postsToAdd.isNotEmpty) {
                                       WidgetsBinding.instance
-                                          .addPostFrameCallback(
-                                              (_) => setState(() {
-                                                    feed.addPosts(postsToAdd);
-                                                  }));
+                                          .addPostFrameCallback((_) {
+                                        if (mounted) {
+                                          setState(() {
+                                            feed.addPosts(postsToAdd);
+                                          });
+                                        }
+                                      });
                                     }
                                     return Container();
                                   }
@@ -134,9 +140,12 @@ class _ChatWidgetState extends State<ChatWidget> {
                                 readPostsQuery.whenComplete(() {
                                   readPostsQuery = chatRepository.readPosts(
                                       before: earliestPost.createdAt);
-                                    WidgetsBinding.instance
-                                        .addPostFrameCallback(
-                                    (_) => setState(() {}));
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((_) {
+                                    if (mounted) {
+                                      setState(() {});
+                                    }
+                                  });
                                 });
                               }
                               return Container();
