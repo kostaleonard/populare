@@ -117,4 +117,21 @@ void main() {
     expect(posts[2].id, 1);
     expect(posts[3].id, 3);
   });
+
+  test('getUnseenPosts removes duplicate posts based on ID', () {
+    final feed = ChatFeed();
+    final post1 = ChatPost(
+        id: 1,
+        text: 'text1',
+        author: 'author1',
+        createdAt: DateTime(2022, 1, 1, 12));
+    final post2 = ChatPost(
+        id: 1,
+        text: 'text2',
+        author: 'author2',
+        createdAt: DateTime(2022, 1, 2, 12));
+    feed.addPost(post1);
+    final diff = feed.getUnseenPosts([post2]);
+    expect(diff, isEmpty);
+  });
 }

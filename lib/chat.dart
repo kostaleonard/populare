@@ -1,5 +1,6 @@
 //Contains the chat widget.
 
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:populare/chat_feed.dart';
@@ -28,6 +29,7 @@ class _ChatWidgetState extends State<ChatWidget> {
   late TextEditingController _textEditingController;
   late FocusNode _textFieldFocusNode;
   late ScrollController _scrollController;
+  late Timer readPostsTimer;
   final _biggerFont = const TextStyle(fontSize: 18);
   final feed = ChatFeed();
 
@@ -40,6 +42,20 @@ class _ChatWidgetState extends State<ChatWidget> {
     _textEditingController = TextEditingController(text: '');
     _textFieldFocusNode = FocusNode();
     _scrollController = ScrollController();
+    readPostsTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+      readPostsQuery.whenComplete(() async {
+        //Check for recent posts.
+        readPostsQuery = chatRepository.readPosts();
+        final postsToAdd = await readPostsQuery;
+        if (postsToAdd.isNotEmpty && feed.getUnseenPosts(postsToAdd).isNotEmpty) {
+          WidgetsBinding.instance
+              .addPostFrameCallback(
+                  (_) => setState(() {
+                feed.addPosts(postsToAdd);
+              }));
+        }
+      });
+    });
   }
 
   @override
@@ -47,6 +63,7 @@ class _ChatWidgetState extends State<ChatWidget> {
     _textEditingController.dispose();
     _textFieldFocusNode.dispose();
     _scrollController.dispose();
+    readPostsTimer.cancel();
     super.dispose();
   }
 

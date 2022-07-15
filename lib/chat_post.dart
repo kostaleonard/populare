@@ -25,6 +25,11 @@ class ChatPost implements Comparable<ChatPost> {
   }
 
   @override
+  String toString() {
+    return '($id) $text:${getDisplayDate()}';
+  }
+
+  @override
   int compareTo(ChatPost other) {
     if (id == other.id) {
       return 0;
