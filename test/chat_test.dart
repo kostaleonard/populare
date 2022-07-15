@@ -2,12 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:populare/local_chat_repository.dart';
 import 'package:populare/chat.dart';
-import 'mock_chat_repository.dart';
 
 void main() {
   testWidgets('Chat widget has one text box', (WidgetTester tester) async {
-    final chatRepository = MockChatRepository();
+    final chatRepository = LocalChatRepository();
     await tester.pumpWidget(
         MaterialApp(home: ChatWidget(chatRepository: chatRepository)));
     await tester.pump();
@@ -16,7 +16,7 @@ void main() {
 
   testWidgets('Pressing send button displays new message',
       (WidgetTester tester) async {
-    final chatRepository = MockChatRepository();
+    final chatRepository = LocalChatRepository();
     await tester.pumpWidget(
         MaterialApp(home: ChatWidget(chatRepository: chatRepository)));
     await tester.pump();
@@ -30,7 +30,7 @@ void main() {
 
   testWidgets('Pressing send button clears text field',
       (WidgetTester tester) async {
-    final chatRepository = MockChatRepository();
+    final chatRepository = LocalChatRepository();
     await tester.pumpWidget(
         MaterialApp(home: ChatWidget(chatRepository: chatRepository)));
     await tester.pump();
@@ -44,7 +44,7 @@ void main() {
 
   testWidgets('Pressing enter displays new message',
       (WidgetTester tester) async {
-    final chatRepository = MockChatRepository();
+    final chatRepository = LocalChatRepository();
     await tester.pumpWidget(
         MaterialApp(home: ChatWidget(chatRepository: chatRepository)));
     await tester.pump();
@@ -57,7 +57,7 @@ void main() {
   });
 
   testWidgets('Pressing enter clears text field', (WidgetTester tester) async {
-    final chatRepository = MockChatRepository();
+    final chatRepository = LocalChatRepository();
     await tester.pumpWidget(
         MaterialApp(home: ChatWidget(chatRepository: chatRepository)));
     await tester.pump();
@@ -71,7 +71,7 @@ void main() {
 
   testWidgets('Posts are displayed with most recent at the bottom',
       (WidgetTester tester) async {
-    final chatRepository = MockChatRepository();
+    final chatRepository = LocalChatRepository();
     await tester.pumpWidget(
         MaterialApp(home: ChatWidget(chatRepository: chatRepository)));
     await tester.pump();
@@ -88,7 +88,7 @@ void main() {
 
   testWidgets('Whitespace only posts are not submitted',
       (WidgetTester tester) async {
-    final chatRepository = MockChatRepository();
+    final chatRepository = LocalChatRepository();
     await tester.pumpWidget(
         MaterialApp(home: ChatWidget(chatRepository: chatRepository)));
     await tester.pump();
