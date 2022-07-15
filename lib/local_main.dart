@@ -1,10 +1,12 @@
-//Runs the app.
+//Runs the app in local mode for demonstration purposes.
 
 import 'package:flutter/material.dart';
 import 'package:populare/chat.dart';
+import 'package:populare/local_chat_repository.dart';
 
 void main() {
-  runApp(PopulareApp());
+  runApp(PopulareApp(
+      chatWidget: ChatWidget(chatRepository: LocalChatRepository())));
 }
 
 class PopulareApp extends StatelessWidget {

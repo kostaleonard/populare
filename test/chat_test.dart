@@ -16,7 +16,7 @@ void main() {
 
   testWidgets('Pressing send button displays new message',
       (WidgetTester tester) async {
-        final chatRepository = LocalChatRepository();
+    final chatRepository = LocalChatRepository();
     await tester.pumpWidget(
         MaterialApp(home: ChatWidget(chatRepository: chatRepository)));
     await tester.pump();
@@ -30,7 +30,7 @@ void main() {
 
   testWidgets('Pressing send button clears text field',
       (WidgetTester tester) async {
-        final chatRepository = LocalChatRepository();
+    final chatRepository = LocalChatRepository();
     await tester.pumpWidget(
         MaterialApp(home: ChatWidget(chatRepository: chatRepository)));
     await tester.pump();
@@ -44,7 +44,7 @@ void main() {
 
   testWidgets('Pressing enter displays new message',
       (WidgetTester tester) async {
-        final chatRepository = LocalChatRepository();
+    final chatRepository = LocalChatRepository();
     await tester.pumpWidget(
         MaterialApp(home: ChatWidget(chatRepository: chatRepository)));
     await tester.pump();
@@ -71,7 +71,7 @@ void main() {
 
   testWidgets('Posts are displayed with most recent at the bottom',
       (WidgetTester tester) async {
-        final chatRepository = LocalChatRepository();
+    final chatRepository = LocalChatRepository();
     await tester.pumpWidget(
         MaterialApp(home: ChatWidget(chatRepository: chatRepository)));
     await tester.pump();
@@ -88,7 +88,7 @@ void main() {
 
   testWidgets('Whitespace only posts are not submitted',
       (WidgetTester tester) async {
-        final chatRepository = LocalChatRepository();
+    final chatRepository = LocalChatRepository();
     await tester.pumpWidget(
         MaterialApp(home: ChatWidget(chatRepository: chatRepository)));
     await tester.pump();
