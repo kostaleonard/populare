@@ -2,8 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:populare/chat.dart';
+import 'package:populare/local_chat_repository.dart';
 
 void main() {
+  //TODO switch this on for local deployment
+  //runApp(PopulareApp(chatWidget: ChatWidget(chatRepository: LocalChatRepository())));
   runApp(PopulareApp());
 }
 
