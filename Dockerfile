@@ -1,6 +1,7 @@
 # Adapted from https://github.com/edwardinubuntu/flutter-web-dockerfile
 # Stage 1 - Install dependencies and build the app
 FROM debian:latest AS build-env
+ARG APP_TARGET=lib/main.dart
 
 # Install flutter dependencies
 RUN apt-get update
@@ -24,8 +25,9 @@ RUN flutter config --enable-web
 RUN mkdir /app/
 COPY . /app/
 WORKDIR /app/
-RUN flutter build web --target=lib/local_main.dart
+RUN flutter build web --target=${APP_TARGET}
 
 # Stage 2 - Create the run-time image
 FROM nginx:1.21.1-alpine
+EXPOSE 9000
 COPY --from=build-env /app/build/web /usr/share/nginx/html
