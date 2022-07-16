@@ -1,9 +1,7 @@
 name: Deploy to GitHub Pages and deliver to DockerHub
-# For testing:
-on: [push, pull_request]
-#on:
-#  release:
-#    types: [published]
+on:
+  release:
+    types: [published]
 jobs:
   deploy-pages:
     runs-on: ubuntu-latest
