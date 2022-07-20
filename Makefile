@@ -1,4 +1,5 @@
 VERSION=$(shell python get_app_version.py)
+TEST_VERSION=v0.0.10
 
 all: version
 
@@ -30,3 +31,11 @@ docker_push:
 	@echo Pushing $(VERSION) and latest
 	docker push kostaleonard/populare:latest
 	docker push kostaleonard/populare:$(VERSION)
+
+docker_build_test:
+	@echo Building test
+	docker build -t kostaleonard/populare:test$(TEST_VERSION) .
+
+docker_push_test:
+	@echo Pushing test
+	docker push kostaleonard/populare:test$(TEST_VERSION)

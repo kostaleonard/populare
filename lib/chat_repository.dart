@@ -2,6 +2,7 @@
 //Interfaces with the database proxy to create, read, update, delete posts.
 
 import 'dart:convert';
+import 'dart:developer';
 import 'package:path/path.dart' as path;
 import 'package:http/http.dart' as http;
 import 'package:populare/chat_post.dart';
@@ -31,6 +32,7 @@ class ChatRepository {
   }
 
   Future<http.Response> getDbProxyHealth() {
+    print('Getting proxy health at $dbProxyHealthUri');
     return client.get(Uri.parse(dbProxyHealthUri));
   }
 
@@ -55,8 +57,10 @@ class ChatRepository {
     final beforeStr = 'before: "${before.toIso8601String()}"';
     final args = '(${[limitStr, beforeStr].join(', ')})';
     final body = '{ readPosts$args }';
+    print('Read posts query to $dbProxyGraphqlUri: $body');
     final response = await client.post(Uri.parse(dbProxyGraphqlUri),
         headers: ChatRepository.headers, body: body);
+    print('Read posts query response $response');
     if (response.statusCode != 200) {
       throw DbProxyCommunicationException('Could not reach database proxy');
     }
