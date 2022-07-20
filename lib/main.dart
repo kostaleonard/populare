@@ -2,9 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:populare/chat.dart';
+import 'package:populare/chat_repository.dart';
 
 void main() {
-  runApp(PopulareApp());
+  runApp(PopulareApp(
+      chatWidget: ChatWidget(
+          chatRepository: ChatRepository(
+              dbProxyUri: 'http://${Uri.base.authority}/db-proxy'))));
 }
 
 class PopulareApp extends StatelessWidget {
