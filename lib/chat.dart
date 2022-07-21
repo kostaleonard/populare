@@ -26,12 +26,14 @@ class _ChatWidgetState extends State<ChatWidget> {
   late final Future<http.Response> healthQuery;
   late final Future<List<ChatPost>> initialReadPostsQuery;
   late Future<List<ChatPost>> endOfFeedReadPostsQuery;
+  late bool triggerEOFQuery;
   late Future<List<ChatPost>> timerReadPostsQuery;
   Future<ChatPost>? createPostQuery;
   late TextEditingController _textEditingController;
   late FocusNode _textFieldFocusNode;
   late ScrollController _scrollController;
-  late Timer readPostsTimer;
+  late Timer timerReadPostsQueryTimer;
+  late Timer endOfFeedReadPostsQueryTimer;
   final _biggerFont = const TextStyle(fontSize: 18);
   final feed = ChatFeed();
 
@@ -46,7 +48,7 @@ class _ChatWidgetState extends State<ChatWidget> {
     initialReadPostsQuery = chatRepository.readPosts();
     endOfFeedReadPostsQuery = Future.value([]);
     timerReadPostsQuery = Future.value([]);
-    readPostsTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+    timerReadPostsQueryTimer = Timer.periodic(const Duration(seconds: 1), (_) {
       timerReadPostsQuery.whenComplete(() async {
         //Check for recent posts.
         timerReadPostsQuery = chatRepository.readPosts();
@@ -63,11 +65,39 @@ class _ChatWidgetState extends State<ChatWidget> {
         }
       });
     });
+    triggerEOFQuery = false;
+    endOfFeedReadPostsQueryTimer =
+        Timer.periodic(const Duration(seconds: 1), (_) {
+      //Only trigger query when we get to the end of the feed.
+      if (!triggerEOFQuery) {
+        return;
+      }
+      //Don't run again until we reach the next end of feed.
+      triggerEOFQuery = false;
+      final posts = feed.getPosts();
+      final earliestPost = posts[posts.length - 1];
+      endOfFeedReadPostsQuery.whenComplete(() async {
+        endOfFeedReadPostsQuery =
+            chatRepository.readPosts(before: earliestPost.createdAt);
+        final postsToAdd = await endOfFeedReadPostsQuery;
+        if (postsToAdd.isNotEmpty &&
+            feed.getUnseenPosts(postsToAdd).isNotEmpty) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              setState(() {
+                feed.addPosts(postsToAdd);
+              });
+            }
+          });
+        }
+      });
+    });
   }
 
   @override
   void dispose() {
-    readPostsTimer.cancel();
+    timerReadPostsQueryTimer.cancel();
+    endOfFeedReadPostsQueryTimer.cancel();
     _textEditingController.dispose();
     _textFieldFocusNode.dispose();
     _scrollController.dispose();
@@ -124,23 +154,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                 final index = i ~/ 2;
                 if (index >= posts.length) {
                   if (posts.isNotEmpty) {
-                    final earliestPost = posts[posts.length - 1];
-                    endOfFeedReadPostsQuery.whenComplete(() async {
-                      await Future.delayed(const Duration(seconds: 1));
-                      endOfFeedReadPostsQuery = chatRepository.readPosts(
-                          before: earliestPost.createdAt);
-                      final postsToAdd = await endOfFeedReadPostsQuery;
-                      if (postsToAdd.isNotEmpty &&
-                          feed.getUnseenPosts(postsToAdd).isNotEmpty) {
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          if (mounted) {
-                            setState(() {
-                              feed.addPosts(postsToAdd);
-                            });
-                          }
-                        });
-                      }
-                    });
+                    triggerEOFQuery = true;
                   }
                   return Container();
                 }
