@@ -64,12 +64,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
       - name: Download artifact
         uses: actions/download-artifact@v2
         with:
           name: populare-image
           path: /tmp
+      - name: List artifacts in /tmp
+        run: ls /tmp
+      - name: List artifacts in the current directory
+        run: ls .
+      - name: Load image
+        run: |
+          docker load --input /tmp/populare-image.tar
+          docker image ls -a
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
