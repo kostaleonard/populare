@@ -70,7 +70,7 @@ jobs:
   deliver:
     needs: [trivy-scan]
     runs-on: ubuntu-latest
-    if: github.event_name == 'release' && github.event.action == 'created'
+    if: github.event_name == 'release'
     steps:
       - uses: actions/checkout@v2
       - name: Get version
