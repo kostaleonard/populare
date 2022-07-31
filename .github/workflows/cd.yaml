@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages and deliver to DockerHub
+name: Deploy offline to GitHub Pages
 on:
   release:
     types: [published]

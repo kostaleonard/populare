@@ -1,22 +1,23 @@
-name: Run linting and tests
+name: Deliver to DockerHub
 on: [push, pull_request]
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-      - name: Install dependencies
-        run: flutter pub get
-      - name: Format
-        run: flutter format --set-exit-if-changed .
-      - name: Generate mocks
-        run: flutter pub run build_runner build
-      - name: Lint
-        run: flutter analyze
-      - name: Test
-        run: flutter test
+# TODO turn on test stage
+#  test:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Set up Flutter
+#        uses: subosito/flutter-action@v2
+#      - name: Install dependencies
+#        run: flutter pub get
+#      - name: Format
+#        run: flutter format --set-exit-if-changed .
+#      - name: Generate mocks
+#        run: flutter pub run build_runner build
+#      - name: Lint
+#        run: flutter analyze
+#      - name: Test
+#        run: flutter test
   build:
     needs: [test]
     runs-on: ubuntu-latest
@@ -48,17 +49,18 @@ jobs:
         with:
           name: populare-image
           path: /tmp/populare.tar
-      - name: Build image, offline
-        uses: docker/build-push-action@v3
-        with:
-          build-args: APP_TARGET=lib/local_main.dart
-          tags: kostaleonard/populare-offline:latest,kostaleonard/populare-offline:${{ env.POPULARE_BUILD_VERSION }}
-          outputs: type=docker,dest=/tmp/populare-offline.tar
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: populare-offline-image
-          path: /tmp/populare-offline.tar
+# TODO add online build
+#      - name: Build image, offline
+#        uses: docker/build-push-action@v3
+#        with:
+#          build-args: APP_TARGET=lib/local_main.dart
+#          tags: kostaleonard/populare-offline:latest,kostaleonard/populare-offline:${{ env.POPULARE_BUILD_VERSION }}
+#          outputs: type=docker,dest=/tmp/populare-offline.tar
+#      - name: Upload artifact
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: populare-offline-image
+#          path: /tmp/populare-offline.tar
   trivy-scan:
     needs: [build]
     runs-on: ubuntu-latest
@@ -70,10 +72,13 @@ jobs:
         with:
           name: populare-image
           path: /tmp
-#      - name: Load image
-#        run: |
-#          docker load --input /tmp/populare.tar
-#          docker image ls -a
+      - name: List artifacts in /tmp
+        run: ls /tmp
+# TODO don't need to load image
+      - name: Load image
+        run: |
+          docker load --input /tmp/populare.tar
+          docker image ls -a
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
@@ -88,6 +93,23 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'release' && github.event.action == 'created'
     steps:
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Download artifact, online
+        uses: actions/download-artifact@v2
+        with:
+          name: populare-image
+          path: /tmp
+      - name: Download artifact, offline
+        uses: actions/download-artifact@v2
+        with:
+          name: populare-offline-image
+          path: /tmp
+      - name: Load images
+        run: |
+          docker load --input /tmp/populare.tar
+          docker load --input /tmp/populare-offline.tar
+          docker image ls -a
       # TODO I think this builds again, doesn't cache
       # These build steps use the cached images according to docker/build-push-action docs.
       # We want to use the cached images so that we don't build twice.
