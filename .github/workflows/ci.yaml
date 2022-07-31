@@ -50,7 +50,7 @@ jobs:
         with:
           name: populare-image
           path: /tmp/populare.tar
-# TODO add online build
+# TODO add offline build
 #      - name: Build image, offline
 #        uses: docker/build-push-action@v3
 #        with:
@@ -75,11 +75,6 @@ jobs:
           path: .
       - name: List artifacts in current directory
         run: ls .
-# TODO don't need to load image
-      - name: Load image
-        run: |
-          docker load --input populare.tar
-          docker image ls -a
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
@@ -92,7 +87,8 @@ jobs:
   deliver:
     needs: [trivy-scan]
     runs-on: ubuntu-latest
-    if: github.event_name == 'release' && github.event.action == 'created'
+# TODO turn on filter
+#    if: github.event_name == 'release' && github.event.action == 'created'
     steps:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
