@@ -46,6 +46,8 @@ jobs:
         with:
           tags: kostaleonard/populare:latest,kostaleonard/populare:${{ env.POPULARE_BUILD_VERSION }}
           outputs: type=docker,dest=/tmp/populare.tar
+          cache-from: type=gha
+          cache-to: type=gha
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
@@ -130,6 +132,8 @@ jobs:
         with:
           push: true
           tags: kostaleonard/populare:latest,kostaleonard/populare:${{ env.POPULARE_BUILD_VERSION }}
+          cache-from: type=gha
+          cache-to: type=gha
       - name: Build and push, offline
         uses: docker/build-push-action@v3
         with:
