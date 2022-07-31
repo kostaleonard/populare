@@ -47,32 +47,18 @@ jobs:
         with:
           name: populare-image
           path: /tmp/populare.tar
-      - name: Build image, offline
-        uses: docker/build-push-action@v3
-        with:
-          build-args: APP_TARGET=lib/local_main.dart
-          tags: kostaleonard/populare-offline:latest,kostaleonard/populare-offline:${{ env.POPULARE_BUILD_VERSION }}
-          outputs: type=docker,dest=/tmp/populare-offline.tar
-          cache-from: type=gha
-          cache-to: type=gha
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: populare-offline-image
-          path: /tmp/populare-offline.tar
   trivy-scan:
     needs: [build]
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+# TODO don't think I need buildx
+#      - name: Set up Docker Buildx
+#        uses: docker/setup-buildx-action@v2
       - name: Download artifact
         uses: actions/download-artifact@v2
         with:
           name: populare-image
           path: .
-      - name: List artifacts in current directory
-        run: ls .
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
@@ -135,5 +121,3 @@ jobs:
           push: true
           build-args: APP_TARGET=lib/local_main.dart
           tags: kostaleonard/populare-offline:latest,kostaleonard/populare-offline:${{ env.POPULARE_BUILD_VERSION }}
-          cache-from: type=gha
-          cache-to: type=gha
