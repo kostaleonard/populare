@@ -50,18 +50,17 @@ jobs:
         with:
           name: populare-image
           path: /tmp/populare.tar
-# TODO add offline build
-#      - name: Build image, offline
-#        uses: docker/build-push-action@v3
-#        with:
-#          build-args: APP_TARGET=lib/local_main.dart
-#          tags: kostaleonard/populare-offline:latest,kostaleonard/populare-offline:${{ env.POPULARE_BUILD_VERSION }}
-#          outputs: type=docker,dest=/tmp/populare-offline.tar
-#      - name: Upload artifact
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: populare-offline-image
-#          path: /tmp/populare-offline.tar
+      - name: Build image, offline
+        uses: docker/build-push-action@v3
+        with:
+          build-args: APP_TARGET=lib/local_main.dart
+          tags: kostaleonard/populare-offline:latest,kostaleonard/populare-offline:${{ env.POPULARE_BUILD_VERSION }}
+          outputs: type=docker,dest=/tmp/populare-offline.tar
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: populare-offline-image
+          path: /tmp/populare-offline.tar
   trivy-scan:
     needs: [build]
     runs-on: ubuntu-latest
