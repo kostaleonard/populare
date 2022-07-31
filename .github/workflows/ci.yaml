@@ -72,18 +72,18 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: populare-image
-          path: /tmp
-      - name: List artifacts in /tmp
-        run: ls /tmp
+          path: .
+      - name: List artifacts in current directory
+        run: ls .
 # TODO don't need to load image
       - name: Load image
         run: |
-          docker load --input /tmp/populare.tar
+          docker load --input populare.tar
           docker image ls -a
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          input: '/tmp/populare.tar'
+          input: '/github/workspace/populare.tar'
           format: 'table'
           exit-code: '0'
           ignore-unfixed: true
