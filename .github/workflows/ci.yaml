@@ -38,7 +38,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build and export to Docker, online
+      - name: Build image, online
         uses: docker/build-push-action@v3
         with:
           tags: kostaleonard/populare:latest,kostaleonard/populare:${{ env.POPULARE_BUILD_VERSION }}
@@ -48,7 +48,7 @@ jobs:
         with:
           name: populare-image
           path: /tmp/populare.tar
-      - name: Build and export to Docker, offline
+      - name: Build image, offline
         uses: docker/build-push-action@v3
         with:
           build-args: APP_TARGET=lib/local_main.dart
@@ -70,18 +70,14 @@ jobs:
         with:
           name: populare-image
           path: /tmp
-      - name: List artifacts in /tmp
-        run: ls /tmp
-      - name: List artifacts in the current directory
-        run: ls .
-      - name: Load image
-        run: |
-          docker load --input /tmp/populare-image.tar
-          docker image ls -a
+#      - name: Load image
+#        run: |
+#          docker load --input /tmp/populare.tar
+#          docker image ls -a
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          input: '/tmp/populare-image.tar'
+          input: '/tmp/populare.tar'
           format: 'table'
           exit-code: '0'
           ignore-unfixed: true
