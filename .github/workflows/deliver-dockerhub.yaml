@@ -1,5 +1,9 @@
 name: Deliver to DockerHub
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  release:
+    types: [published]
 jobs:
   test:
     runs-on: ubuntu-latest
